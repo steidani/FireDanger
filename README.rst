@@ -12,15 +12,16 @@ It contains implementations of several popular fire danger and drought indices:
 
 - Canadian Fire Weather Index System (FWI) including all its 6 components
 
-Coming up next:
-- Angström Index
-- Baumgartner Index
-- Nesterov index
-- Munger Drought index
-- Fuel Moisture Index
-- Fosberg Fire Weather Index
-- Keetch-Byram Drought Index
-- McArthur Mark 5 Forest Fire Danger Index
+Coming up next:  
+
+- Angström Index  
+- Baumgartner Index  
+- Nesterov index  
+- Munger Drought index  
+- Fuel Moisture Index  
+- Fosberg Fire Weather Index  
+- Keetch-Byram Drought Index  
+- McArthur Mark 5 Forest Fire Danger Index  
 
 The package is developed as part of the project "Waldbrandmanagement auf der Alpennordseite" by the Canton of Bern, the `University of Bern <https://www.geography.unibe.ch/about_us/staff/dr_steinfeld_daniel/index_eng.html>`_ and the `Wyss Academy for Nature <https://www.wyssacademy.org/>`_.  
 A big "thank you" to the `Swiss federal institute of forest, snow and landscape research WSL <https://www.wsl.ch/en/index.html>`_ for providing a public `WIKI <https://wikifire.wsl.ch/tiki-index.html>`_ with reference information on the mostly used fire weather indices.
