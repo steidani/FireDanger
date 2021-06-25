@@ -11,7 +11,7 @@ example/
 fortran/
 data/
 R/
-notebook/
+notebooks/
 
 # vscode
 .vscode/
