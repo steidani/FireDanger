@@ -126,14 +126,14 @@ class firedanger(object):
                 self.ntime, ", ".join(self.variables)
             )
         except AttributeError:
-            # Assume it's an empty Blocking()
+            # Assume it's an empty fire()
             string = "\
             Empty firedanger container.\n\
             Hint: use read_nc() or read_csv() to load data."
         return string
 
-    def __str__(self):
-        return 'Class {}: \n{}'.format(self.__class__.__name__, self.ds)
+    #def __str__(self):
+    #    return 'Class {}: \n{}'.format(self.__class__.__name__, self.ds)
   
     def __len__(self):
         return len(self.ds)
@@ -468,7 +468,7 @@ class firedanger(object):
         Returns
         -------
             ds: xarray dataset
-                Speed of the wind
+                Speed of the wind [m/s]
         """
         # create new variable wind     
         self.ds['wind'] = xr.Variable(
@@ -486,13 +486,29 @@ class firedanger(object):
 
 
     
-    def calc_ffmc(self, 
+    def calc_canadian_fwi(self, 
                   temp, 
                   precip, 
                   hum, 
                   wind
     ):
-        """ a test function that takes meteo input and calculates value 
+        """ Calculate the Canadian Fire Weather Index 
+
+        Parameters
+        ----------
+        t: array
+            Noon temperature [C].
+        p : array
+            rainfall amount in open over previous 24 hours, at noon [mm].
+        w : array
+            Noon wind speed [m/s].
+        h : array
+            Noon relative humidity [%].
+        
+        Returns
+        -------
+        ds: xarray dataset
+            Components of the Canadian Fire Weather Index: ffmc, dmc, dc, isi, bui, fwi [dimensionless]
         """
 
         # Set up dimensions
@@ -515,9 +531,19 @@ class firedanger(object):
         ffmc = 85.0
         dmc = 6.0 
         dc = 15.0
-        out = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
+        out_ffmc = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
+        out_dmc = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
+        out_dc = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
+        out_isi = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
+        out_bui = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
+        out_fwi = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
         # if dask array, need to load into memory; dask array in xarray does not yet support item assignment. See issue: https://github.com/pydata/xarray/issues/5171)
-        out.load()
+        out_ffmc.load()
+        out_dmc.load()
+        out_dc.load()
+        out_isi.load()
+        out_bui.load()
+        out_fwi.load()
 
         # loop over time
         for i_time in range(self.ds.dims[self._time_name]): 
@@ -553,13 +579,23 @@ class firedanger(object):
 
             
             # item assignment
-            out[dict(**{self._time_name: i_time})] = fwi
-        out.close()
+            out_ffmc[dict(**{self._time_name: i_time})] = ffmc
+            out_dmc[dict(**{self._time_name: i_time})] = dmc
+            out_dc[dict(**{self._time_name: i_time})] = dc
+            out_isi[dict(**{self._time_name: i_time})] = isi
+            out_bui[dict(**{self._time_name: i_time})] = bui
+            out_fwi[dict(**{self._time_name: i_time})] = fwi
+        out_ffmc.close()
+        out_dmc.close()
+        out_dc.close()
+        out_isi.close()
+        out_bui.close()
+        out_fwi.close()
 
         # create new variable ffmc     
         self.ds['ffmc'] = xr.Variable(
             self.ds[temp].dims,
-            out.values,  
+            out_ffmc.values,  
             attrs={
                 'units': 'dimensionless',
                 'long_name': 'Fine fuel moisture code',
@@ -568,6 +604,71 @@ class firedanger(object):
                     'Calculated from input variables: {}, {}, {}, {}.'])
                     .format(temp, precip, hum, wind)}
         )
+
+        # create new variable dmc     
+        self.ds['dmc'] = xr.Variable(
+            self.ds[temp].dims,
+            out_dmc.values,  
+            attrs={
+                'units': 'dimensionless',
+                'long_name': 'Duff moisture code',
+                'standard_name': 'dmc',
+                'history': ' '.join([
+                    'Calculated from input variables: {}, {}, {}.'])
+                    .format(temp, precip, hum)}
+        )
+
+        # create new variable dc     
+        self.ds['dc'] = xr.Variable(
+            self.ds[temp].dims,
+            out_dc.values,  
+            attrs={
+                'units': 'dimensionless',
+                'long_name': 'Drought code',
+                'standard_name': 'dc',
+                'history': ' '.join([
+                    'Calculated from input variables: {}, {}.'])
+                    .format(temp, precip)}
+        )
+
+        # create new variable isi     
+        self.ds['isi'] = xr.Variable(
+            self.ds[temp].dims,
+            out_isi.values,  
+            attrs={
+                'units': 'dimensionless',
+                'long_name': 'Initialize spread index',
+                'standard_name': 'isi',
+                'history': ' '.join([
+                    'Calculated from input variables: {}, {}.'])
+                    .format(wind, "ffmc")}
+        )
+
+        # create new variable bui     
+        self.ds['bui'] = xr.Variable(
+            self.ds[temp].dims,
+            out_bui.values,  
+            attrs={
+                'units': 'dimensionless',
+                'long_name': 'Build-up index',
+                'standard_name': 'bui',
+                'history': ' '.join([
+                    'Calculated from input variables: {}, {}.'])
+                    .format("dmc", "dc")}
+        )
+
+        # create new variable fwi     
+        self.ds['fwi'] = xr.Variable(
+            self.ds[temp].dims,
+            out_fwi.values,  
+            attrs={
+                'units': 'dimensionless',
+                'long_name': 'Fire weather index',
+                'standard_name': 'fwi',
+                'history': ' '.join([
+                    'Calculated from input variables: {}, {}.'])
+                    .format("isi", "bui")}
+        )
         # chunk it
         #self.ds['ffmc'] = self.ds['ffmc'].chunk(chunks = {self.ds[temp].chunks})
-        logger.info('Calculating ffmc... DONE')
+        logger.info('Calculating Canadian Fire Weather Index (ffmc, dmc, dc, isi, bui, fwi)... DONE')

@@ -5,10 +5,10 @@ FireDanger - Forest Fire Danger
 Calculation of indices for forest fire risk assessment in weather and climate data
 ==================================================================================
 
-!!IMPORTANT!! This tool is still under development and not yet intented for use
+June, 2021: **IMPORTANT** This tool is still under development and not yet intented for use!! 
 
 FireDanger is a Python package intended to simpify the process of analysing forest fire (and drought) in time series and gridded weather and climate datasets. It is built on top of `xarray`_.  
-It contains implementations of several popular fire danger and drought indices:
+It contains implementations of several popular fire danger and drought indices calculated from meteorological parameters:
 
 - Canadian Fire Weather Index System (FWI) including all its 6 components
 
@@ -23,7 +23,7 @@ Coming up next:
 - Keetch-Byram Drought Index  
 - McArthur Mark 5 Forest Fire Danger Index  
 
-The package is developed as part of the project "Waldbrandmanagement auf der Alpennordseite" by the Canton of Bern, the `University of Bern <https://www.geography.unibe.ch/about_us/staff/dr_steinfeld_daniel/index_eng.html>`_ and the `Wyss Academy for Nature <https://www.wyssacademy.org/>`_.  
+The package is developed as part of the project "Waldbrandmanagement auf der Alpennordseite" by the `University of Bern <https://www.geography.unibe.ch/about_us/staff/dr_steinfeld_daniel/index_eng.html>`_.  
 A big "thank you" to the `Swiss federal institute of forest, snow and landscape research WSL <https://www.wsl.ch/en/index.html>`_ for providing a public `WIKI <https://wikifire.wsl.ch/tiki-index.html>`_ with reference information on the mostly used fire weather indices.
 
 ..
@@ -84,4 +84,48 @@ Run the tests:
     python -m pytest
 
 
+==========
+Tutorial
+==========
 
+Example: Calculate Canadian Forest Fire Danger Rating System
+------------------------------------------------------------
+
+.. code-block:: python 
+   
+   # import firedanger module 
+   from firedanger import firedanger
+
+   # initiate instance
+   fire = firedanger()
+   
+   # read COSMO-1 analysis hourly data from 20180801_00 to 20180814_03 with 0.01° (~1 km) spatial resolution)
+   fire.read_nc('data/cosmo-1_ana.nc')
+   print(fire)
+   # Out[]:	Xarray dataset with 316 time steps. 
+   #	     	Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M
+
+   # select time at 12 noon
+   fire.ds = fire.ds.sel(time=datetime.time(12))
+   # xarray.Dataset (and all its functions) can be accessed with fire.ds
+  
+   # calculate wind speed
+   fire.calc_windspeed(u="U_10M", v="V_10M")
+   # creates new variable "wind"
+
+   # calculate Canadian Forest Fire Weather Indices
+   fire.calc_fwi(temp="T_2M", precip="TOT_PREC", hum="RELHUM_2M", wind="wind")
+   print(fire)
+   # Out[]:	Xarray dataset with 13 time steps. 
+   #	     	Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M, wind, ffmc, dmc, dc, isi, bui, fwi
+
+   # save to disk
+   fire.to_netcdf('data/cosmo-1_daily_fire.nc')
+
+   # plot one timestep
+   fire.dmc[0].plot(cmap="plasma")
+   plt.show()
+
+.. image:: docs/20180801_dmc_cosmo1.png
+   :width: 20 px
+   :align: center
