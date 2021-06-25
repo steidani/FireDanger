@@ -54,8 +54,8 @@ import math
 import numpy as np
 import pandas as pd
 import xarray as xr
-import metpy.calc as mpcalc
-from metpy.units import units
+#import metpy.calc as mpcalc    # not yet used, but maybe in future
+#from metpy.units import units
 import datetime as datetime
 from numba import jit, vectorize
 from typing import Optional, Sequence, Union
@@ -83,8 +83,12 @@ def tdewpoint_from_relhum(t, h):
   -------
   tdewpoint_from_relhum(20,50) == 9.270085985370075
   """
-
-  return mpcalc.dewpoint_from_relative_humidity(t* units.degC, h* units.percent).magnitude
+  A = 17.67
+  B = 243.5
+  alpha = ((A * t) / (B + t)) + math.log(h/100.0)
+  return (B * alpha) / (A - alpha)
+  
+  #return mpcalc.dewpoint_from_relative_humidity(t* units.degC, h* units.percent).magnitude
 
 # ===============
 # Net Radiation

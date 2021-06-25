@@ -53,8 +53,8 @@ To install the development version (master), do:
 
     pip install git+https://github.com/steidani/firedanger.git
 
-Copy from Github repository
----------------------------
+Copy code from Github repository
+--------------------------------
 
 Copy/clone locally the latest version from FireDanger:
 
