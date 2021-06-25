@@ -7,10 +7,11 @@ tests/__pycache__/
 *$py.class
 
 # folders
-examples/
+example/
 fortran/
 data/
 R/
+notebook/
 
 # vscode
 .vscode/
