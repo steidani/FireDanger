@@ -127,5 +127,5 @@ Example: Calculate Canadian Forest Fire Danger Rating System
    plt.show()
 
 .. image:: docs/20180801_dmc_cosmo1.png
-   :width: 10 px
+   :width: 5 px
    :align: center
