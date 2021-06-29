@@ -21,8 +21,8 @@ Examples
 --------
 
 >>> filename = 'data.nc' or 'data.csv'
->>> fire = firedanger()
->>> fire.read_nc(filename.nc) or fire.read_nc(filename.csv)
+>>> fire = firedanger() 
+>>> fire.read_nc(filename.nc) or fire.read_csv(filename.csv) 
 
 Author
 --------
@@ -551,6 +551,7 @@ class firedanger(object):
         out_fwi.load()
 
         # loop over time
+        # calculate indices at each timestep
         for i_time in range(self.ds.dims[self._time_name]): 
             currentstep = self.ds[self._time_name].isel(**{self._time_name: i_time}).dt.strftime('%Y%m%d_%H').values
             
