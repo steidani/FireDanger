@@ -117,6 +117,7 @@ Calculate Canadian Forest Fire Danger Rating System
    fire.to_dataframe().to_csv("data/measurement_fire.csv")
 
    # plot temporal evolution of Duff Moisutre Code
+   import matplotlib.pyplot as plt
    fire.dmc.plot()
    plt.show()
 
@@ -156,10 +157,11 @@ Calculate Canadian Forest Fire Danger Rating System
    # Out[]:	Xarray dataset with 13 time steps. 
    #	        Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M, wind, ffmc, dmc, dc, isi, bui, fwi
 
-   # save to disk
+   # save to disk as netcdf
    fire.to_netcdf('data/cosmo-1_daily_fire.nc')
 
    # plot Duff Moisture Code at one timestep
+   import matplotlib.pyplot as plt
    fire.dmc[0].plot(cmap="plasma")
    plt.show()
 
