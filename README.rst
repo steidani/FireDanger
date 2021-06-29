@@ -166,6 +166,3 @@ Calculate Canadian Forest Fire Danger Rating System
 .. image:: docs/20180801_dmc_cosmo1.png
    :width: 5 px
    :align: center
-
-Xarray dataset with 214 time steps. 
-    Available fields: index, stn, T, P, H, U, ffmc, dmc, dc, isi, bui, fwi
