@@ -98,7 +98,8 @@ Calculate Canadian Forest Fire Danger Rating System
    # import firedanger module 
    from firedanger import firedanger
 
-   # initiate instance and read time series (measurement) from weather station 
+   # initiate instance and 
+   # read time series (measurement) from weather station 
    # measurements are taken daily at 12 noon from 19910501 to 19911130.
    fire = firedanger('data/measurement.csv')
    print(fire)
@@ -132,11 +133,9 @@ Calculate Canadian Forest Fire Danger Rating System
    # import firedanger module 
    from firedanger import firedanger
 
-   # initiate instance
-   fire = firedanger()
-   
+   # initiate instance and
    # read gridded COSMO-1 analysis hourly data from 20180801_00 to 20180814_03 with 0.01° (~1 km) spatial resolution)
-   fire.read_nc('data/cosmo-1_ana.nc')
+   fire = firedanger('data/cosmo-1_ana.nc')
    print(fire)
    # Out[]:	Xarray dataset with 316 time steps. 
    #	        Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M
