@@ -33,7 +33,6 @@ Author
 TO DO
     - __init__: csv file should not raise error.
     - COSMO: lat and lon are in swiss coordinate named x_1 and y_1: us ds.coords to find lat lon?
-        - rename everything to x and y
     - cannot yet handle dask: in future use .data instead of .values?
     - xarray apply_ufunc: https://xarray.pydata.org/en/stable/examples/apply_ufunc_vectorize_1d.html
 
@@ -157,7 +156,7 @@ class firedanger(object):
             logger.warning(
                 "\nBe careful with the dimensions, "
                 "you want dims = 3 and shape:\n"
-                "(time, y, x)"
+                "(time, latitude, longitude)"
             )
             return self.ds.dims[self._get_name_time()]
         return self.ds.dims[self._get_name_time()]
@@ -185,12 +184,12 @@ class firedanger(object):
             logger.warning(
                 "\nBe careful with the dimensions, "
                 "you want dims = 3 and shape:\n"
-                "(time, y, x)"
+                "(time, latitude, longitude)"
             )
             return None
         string = "\
-        y: {} \n\
-        x: {}".format(
+        latitude: {} \n\
+        longitude: {}".format(
             self.ds.dims[self._get_name_latitude()], self.ds.dims[self._get_name_longitude()]
         ) 
         print(string)
@@ -323,8 +322,8 @@ class firedanger(object):
         if write:
             logger.info(
                 "\n time: '{}'\n"
-                " x axis: '{}'\n"
-                " y axis: '{}'\n".format(
+                " longitude: '{}'\n"
+                " latitude: '{}'\n".format(
                 self._time_name, 
                 self._longitude_name,
                 self._latitude_name)
@@ -484,8 +483,7 @@ class firedanger(object):
         )
         logger.info('Calculating wind speed... DONE')
 
-
-    
+  
     def calc_canadian_fwi(self, 
                   temp, 
                   precip, 
@@ -509,6 +507,12 @@ class firedanger(object):
         -------
         ds: xarray dataset
             Components of the Canadian Fire Weather Index: ffmc, dmc, dc, isi, bui, fwi [dimensionless]
+
+        To DO:
+        - latitude array as input --> does not yet work in indices._day_length
+          currently, lat = 47 (Switzerland)
+        - initial values of ffmc, dmc and dc
+        - cannot handle dask array yet: current solution is to load dataset
         """
 
         # Set up dimensions
@@ -531,13 +535,14 @@ class firedanger(object):
         ffmc = 85.0
         dmc = 6.0 
         dc = 15.0
+        # THIS IS QUICK AND UGLY!!! 
         out_ffmc = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
         out_dmc = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
         out_dc = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
         out_isi = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
         out_bui = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
         out_fwi = xr.full_like(self.ds[temp], np.nan, dtype=np.float32)
-        # if dask array, need to load into memory; dask array in xarray does not yet support item assignment. See issue: https://github.com/pydata/xarray/issues/5171)
+        # if dask array, need to load into memory (this takes a little time); dask array in xarray does not yet support item assignment. See issue: https://github.com/pydata/xarray/issues/5171)
         out_ffmc.load()
         out_dmc.load()
         out_dc.load()
