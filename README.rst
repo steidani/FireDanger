@@ -124,6 +124,7 @@ Example for time series (csv)
    :align: center
 
 Example for gridded analysis data (netcdf)
+
 .. code-block:: python 
    
    # import firedanger module 
