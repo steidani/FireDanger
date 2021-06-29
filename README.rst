@@ -101,7 +101,8 @@ Calculate Canadian Forest Fire Danger Rating System
    # initiate instance and 
    # read time series (measurement) from weather station 
    # measurements are taken daily at 12 noon from 19910501 to 19911130.
-   fire = firedanger('data/measurement.csv')
+   # name of time dimension/column is 'time' with format 'YYYYMMDD'
+   fire = firedanger('data/measurement.csv', time_name = "time", time_format='%Y%m%d')
    print(fire)
    # Out[]:	Xarray dataset with 214 time steps.
    #            Available fields: index, stn, T, P, H, U

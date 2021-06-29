@@ -238,7 +238,11 @@ class firedanger(object):
             errmsg = 'firedanger() is already set!'
             raise ValueError(errmsg)
 
-    def read_csv(self, filename, time_name="time", **kwargs):
+    def read_csv(self, 
+                 filename, 
+                 time_name="time", 
+                 time_format='%Y%m%d',
+                 **kwargs):
         """
         Reads a csv file into a xarray dataset.
         
@@ -248,10 +252,13 @@ class firedanger(object):
                 Valid path + filename
             time_name : string in format YYYYMMDD (e.g. 20200130)
                 Name of time dimension/column. The default is "time".
+
+        To Do:
+            - time format as input
         """
         if self.ds is None:
             self.ds = pd.read_csv(filename, **kwargs).set_index([time_name]).to_xarray()
-            self.ds[time_name] = pd.to_datetime(self.ds[time_name].values, format='%Y%m%d', errors='coerce')
+            self.ds[time_name] = pd.to_datetime(self.ds[time_name].values, format=time_format, errors='coerce')
             logger.debug('read: {}'.format(self.__str__))
         else:
             errmsg = 'firedanger() is already set!'
