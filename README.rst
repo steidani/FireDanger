@@ -108,7 +108,7 @@ Calculate Canadian Forest Fire Danger Rating System
    # no preprocessing needed: data is already measured at 12 noon
 
    # calculate Canadian Forest Fire Weather Indices
-   fire.calc_fwi(temp="T", precip="P", hum="H", wind="U")
+   fire.calc_canadian_fwi(temp="T", precip="P", hum="H", wind="U")
    print(fire)
    # Out[]:	Xarray dataset with 214 time steps. 
    #            Available fields: index, stn, T, P, H, U, ffmc, dmc, dc, isi, bui, fwi
@@ -151,7 +151,7 @@ Calculate Canadian Forest Fire Danger Rating System
    # Hint: Use fire.set_up(...) to do consistency check and set (automatically or manually) names of dimension ('time', 'latitude', 'longitude')
 
    # calculate Canadian Forest Fire Weather Indices
-   fire.calc_fwi(temp="T_2M", precip="TOT_PREC", hum="RELHUM_2M", wind="wind")
+   fire.calc_canadian_fwi(temp="T_2M", precip="TOT_PREC", hum="RELHUM_2M", wind="wind")
    print(fire)
    # Out[]:	Xarray dataset with 13 time steps. 
    #	        Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M, wind, ffmc, dmc, dc, isi, bui, fwi
