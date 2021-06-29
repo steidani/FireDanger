@@ -16,6 +16,9 @@ notebooks/
 # vscode
 .vscode/
 
+# git
+git.sh
+
 # C extensions
 *.so
 
