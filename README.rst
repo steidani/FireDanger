@@ -113,6 +113,8 @@ Example: Calculate Canadian Forest Fire Danger Rating System
    fire.calc_windspeed(u="U_10M", v="V_10M")
    # creates new variable "wind"
 
+   # Hint: Use fire.set_up(...) to do consistency check and set (automatically or manually) names of dimension ('time', 'latitude', 'longitude')
+
    # calculate Canadian Forest Fire Weather Indices
    fire.calc_fwi(temp="T_2M", precip="TOT_PREC", hum="RELHUM_2M", wind="wind")
    print(fire)
