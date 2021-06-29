@@ -67,7 +67,7 @@ Prepare the conda environment:
 
 .. code-block:: bash
 
-    conda create -y -q -n firedanger_dev python=3.9.4 pytest
+    conda create -y -q -n firedanger_dev python=3.8.5 pytest
     conda env update -q -f environment.yml -n firedanger_dev
 
 Install firedanger in development mode in firedanger_dev:
@@ -91,6 +91,39 @@ Tutorial
 Example: Calculate Canadian Forest Fire Danger Rating System
 ------------------------------------------------------------
 
+Example for time series (csv)
+
+.. code-block:: python 
+   # import firedanger module 
+   from firedanger import firedanger
+
+   # initiate instance and read time series (measurement) from weather station 
+   # measurements are taken daily at 12 noon from 19910501 to 19911130.
+   fire = firedanger('data/measurement.csv')
+   print(fire)
+   # Out[]: Xarray dataset with 214 time steps. 
+   #        Available fields: index, stn, T, P, H, U
+
+   # no preprocessing needed: data is already measured at 12 noon
+
+   # calculate Canadian Forest Fire Weather Indices
+   fire.calc_fwi(temp="T", precip="P", hum="H", wind="U")
+   print(fire)
+   # Out[]:	Xarray dataset with 214 time steps. 
+   #        Available fields: index, stn, T, P, H, U, ffmc, dmc, dc, isi, bui, fwi
+
+   # save to disk as csv
+   fire.to_dataframe().to_csv("data/measurement_fire.csv")
+
+   # plot temporal evolution of Duff Moisutre Code
+   fire.dmc.plot()
+   plt.show()
+
+.. image:: docs/1991_dmc_measurement.png
+   :width: 5 px
+   :align: center
+
+Example for gridded analysis data (netcdf)
 .. code-block:: python 
    
    # import firedanger module 
@@ -99,11 +132,11 @@ Example: Calculate Canadian Forest Fire Danger Rating System
    # initiate instance
    fire = firedanger()
    
-   # read COSMO-1 analysis hourly data from 20180801_00 to 20180814_03 with 0.01° (~1 km) spatial resolution)
+   # read gridded COSMO-1 analysis hourly data from 20180801_00 to 20180814_03 with 0.01° (~1 km) spatial resolution)
    fire.read_nc('data/cosmo-1_ana.nc')
    print(fire)
    # Out[]:	Xarray dataset with 316 time steps. 
-   #	     	Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M
+   #	    Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M
 
    # select time at 12 noon
    fire.ds = fire.ds.sel(time=datetime.time(12))
@@ -119,12 +152,12 @@ Example: Calculate Canadian Forest Fire Danger Rating System
    fire.calc_fwi(temp="T_2M", precip="TOT_PREC", hum="RELHUM_2M", wind="wind")
    print(fire)
    # Out[]:	Xarray dataset with 13 time steps. 
-   #	     	Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M, wind, ffmc, dmc, dc, isi, bui, fwi
+   #	    Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M, wind, ffmc, dmc, dc, isi, bui, fwi
 
    # save to disk
    fire.to_netcdf('data/cosmo-1_daily_fire.nc')
 
-   # plot one timestep
+   # plot Duff Moisture Code at one timestep
    fire.dmc[0].plot(cmap="plasma")
    plt.show()
 

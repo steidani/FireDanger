@@ -35,6 +35,7 @@ TO DO
     - COSMO: lat and lon are in swiss coordinate named x_1 and y_1: us ds.coords to find lat lon?
     - cannot yet handle dask: in future use .data instead of .values?
     - xarray apply_ufunc: https://xarray.pydata.org/en/stable/examples/apply_ufunc_vectorize_1d.html
+      https://stackoverflow.com/questions/57552588/apply-function-along-time-dimension-of-xarray
 
 """
 

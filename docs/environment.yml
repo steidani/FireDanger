@@ -2,7 +2,7 @@ name: firedanger_dev
 channels:
   - conda-forge
 dependencies:
-  - python=3.9.4
+  - python=3.8.5
   - cartopy=0.19.0
   - xarray=0.16.1
   - dask=2021.6.0
