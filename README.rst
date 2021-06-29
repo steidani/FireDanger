@@ -88,12 +88,13 @@ Run the tests:
 Tutorial
 ==========
 
-Example: Calculate Canadian Forest Fire Danger Rating System
-------------------------------------------------------------
+Calculate Canadian Forest Fire Danger Rating System
+---------------------------------------------------
 
-Example for time series (csv)
+**Example for time series (csv):**
 
 .. code-block:: python 
+
    # import firedanger module 
    from firedanger import firedanger
 
@@ -123,7 +124,7 @@ Example for time series (csv)
    :width: 5 px
    :align: center
 
-Example for gridded analysis data (netcdf)
+**Example for gridded weather data (netcdf):**
 
 .. code-block:: python 
    
@@ -139,11 +140,11 @@ Example for gridded analysis data (netcdf)
    # Out[]:	Xarray dataset with 316 time steps. 
    #	    Available fields: TOT_PREC, T_2M, U_10M, V_10M, RELHUM_2M
 
-   # select time at 12 noon
+   # preprocessing: select only time at 12 noon
    fire.ds = fire.ds.sel(time=datetime.time(12))
    # xarray.Dataset (and all its functions) can be accessed with fire.ds
   
-   # calculate wind speed
+   # preprocessing: calculate wind speed
    fire.calc_windspeed(u="U_10M", v="V_10M")
    # creates new variable "wind"
 
