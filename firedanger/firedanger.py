@@ -216,7 +216,7 @@ class firedanger(object):
             self.ds = xr.open_dataset(filename, **kwargs)
             logger.debug('read: {}'.format(self.__str__))
         else:
-            errmsg = 'contrack() is already set!'
+            errmsg = 'firedanger() is already set!'
             raise ValueError(errmsg)
             
     def read_xarray(self, ds):

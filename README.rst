@@ -105,18 +105,18 @@ Calculate Canadian Forest Fire Danger Rating System
    fire = firedanger('data/measurement.csv', time_name = "time", time_format='%Y%m%d')
    print(fire)
    # Out[]:	Xarray dataset with 214 time steps.
-   #            Available fields: index, stn, T, P, H, U
+   #            Available fields: index, stn, T12, P12, H12, U12
 
    # no preprocessing needed: data is already measured at 12 noon
 
    # calculate Canadian Forest Fire Weather Indices
-   fire.calc_canadian_fwi(temp="T", precip="P", hum="H", wind="U")
+   fire.calc_canadian_fwi(temp="T12", precip="P12", hum="H12", wind="U12")
    print(fire)
    # Out[]:	Xarray dataset with 214 time steps. 
-   #            Available fields: index, stn, T, P, H, U, ffmc, dmc, dc, isi, bui, fwi
+   #            Available fields: index, stn, T12, P12, H12, U12, ffmc, dmc, dc, isi, bui, fwi
 
    # save to disk as csv
-   fire.to_dataframe().to_csv("data/measurement_fire.csv")
+   fire.to_dataframe().to_csv("data/measurement_fire.csv", date_format='%Y%m%d')
 
    # plot temporal evolution of Duff Moisutre Code
    import matplotlib.pyplot as plt
