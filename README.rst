@@ -5,7 +5,7 @@ FireDanger - Forest Fire Danger
 Calculation of indices for forest fire risk assessment in weather and climate data
 ==================================================================================
 
-**IMPORTANT** - June, 2021:  This tool is still under development and not yet intended for use!! 
+**IMPORTANT - June, 2021:  This tool is still under development and not yet intended for use!!**
 
 FireDanger is a Python package intended to simpify the process of analysing forest fire (and drought) in time series and gridded weather and climate datasets. It is built on top of `xarray`_.  
 It contains implementations of several popular fire danger and drought indices calculated from meteorological parameters:
@@ -124,7 +124,7 @@ Calculate Canadian Forest Fire Danger Rating System
    plt.show()
 
 .. image:: docs/1991_dmc_measurement.png
-   :width: 5 px
+   :width: 90%
    :align: center
 
 **Example for gridded weather data (netcdf):**
@@ -166,5 +166,5 @@ Calculate Canadian Forest Fire Danger Rating System
    plt.show()
 
 .. image:: docs/20180801_dmc_cosmo1.png
-   :width: 5 px
+   :width: 90%
    :align: center
