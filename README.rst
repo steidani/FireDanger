@@ -124,7 +124,7 @@ Calculate Canadian Forest Fire Danger Rating System
    plt.show()
 
 .. image:: docs/1991_dmc_measurement.png
-   :width: 90%
+   :width: 70%
    :align: center
 
 **Example for gridded weather data (netcdf):**
@@ -166,5 +166,5 @@ Calculate Canadian Forest Fire Danger Rating System
    plt.show()
 
 .. image:: docs/20180801_dmc_cosmo1.png
-   :width: 90%
+   :width: 70%
    :align: center
