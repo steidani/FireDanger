@@ -506,10 +506,10 @@ class firedanger(object):
             Noon temperature [C].
         p : array
             rainfall amount in open over previous 24 hours, at noon [mm].
-        w : array
-            Noon wind speed [m/s].
         h : array
             Noon relative humidity [%].
+        w : array
+            Noon wind speed [m/s].
         
         Returns
         -------
